@@ -181,13 +181,13 @@ class Star(object):
         Eq. on p5 of arxiv.org/pdf/1706.00495.pdf"""
         assert ((self.Jmag is not None) & (self.Ksmag is not None))
         X = self.Jmag - self.Ksmag
-        if (X > 0.7) and (X < 1.0):
+        if (X > 0.7) and (X <= 1.0):
             return (self.Jmag + 269.372 * X**3 +
                     668.453 * X**2 - 545.64 * X + 147.811)
         elif (X <= 0.7) & (X >= -0.1):
             return (self.Jmag + 1.22163 * X**3 - 1.74299 * X**2 +
                     1.89115 * X + 0.0563)
-        elif (X >= 1.0):
+        elif (X > 1.0):
             return self.Jmag + 1.75
         elif (X < -0.1):
             return self.Jmag + 0.5

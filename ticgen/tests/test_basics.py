@@ -22,6 +22,17 @@ def test_VJKs():
     assert star.TmagProvenance == 'V/J/Ks'
 
 
+def test_VJKs2():
+    # test with J-K outside valid region
+    from ticgen import Star
+    star = Star(Vmag=12, Ksmag=10, Jmag=11.1)
+    assert np.allclose(star.Ksmag, 10.0)
+    assert np.allclose(star.Jmag, 11.1)
+    assert np.allclose(star.Tmag, 12.85) # todo - calc from the paper
+#    assert np.allclose(star.oneSigmaNoise,) # todo - calc from the paper
+    assert star.TmagProvenance == 'J/Ks'
+
+
 def test_BphJKs():
     from ticgen import Star
     star = Star(Bphmag=12, Ksmag=10, Jmag=10.5)
@@ -42,3 +53,48 @@ def test_BJKs():
 #    assert np.allclose(star.Tmag,) # todo - calc from the paper
 #    assert np.allclose(star.oneSigmaNoise,) # todo - calc from the paper
     assert star.TmagProvenance == 'B/J/Ks'
+
+
+def test_JKs():
+    from ticgen import Star
+    # j-k = 0.5
+    star = Star(Ksmag=10, Jmag=10.5)
+    assert np.allclose(star.Ksmag, 10.0)
+    assert np.allclose(star.Jmag, 10.5)
+#    assert np.allclose(star.Tmag,) # todo - calc from the paper
+#    assert np.allclose(star.oneSigmaNoise,) # todo - calc from the paper
+    assert star.TmagProvenance == 'J/Ks'
+
+    # j-k = 1.5
+    star = Star(Ksmag=10, Jmag=11.5)
+    assert np.allclose(star.Ksmag, 10.0)
+    assert np.allclose(star.Jmag, 11.5)
+#    assert np.allclose(star.Tmag,) # todo - calc from the paper
+#    assert np.allclose(star.oneSigmaNoise,) # todo - calc from the paper
+    assert star.TmagProvenance == 'J/Ks'
+
+    # j-k = 0.8
+    star = Star(Ksmag=10, Jmag=10.8)
+    assert np.allclose(star.Ksmag, 10.0)
+    assert np.allclose(star.Jmag, 10.8)
+#    assert np.allclose(star.Tmag,) # todo - calc from the paper
+#    assert np.allclose(star.oneSigmaNoise,) # todo - calc from the paper
+    assert star.TmagProvenance == 'J/Ks'
+
+    # j-k = -1.0
+    star = Star(Ksmag=11, Jmag=10)
+    assert np.allclose(star.Ksmag, 11.0)
+    assert np.allclose(star.Jmag, 10.0)
+#    assert np.allclose(star.Tmag,) # todo - calc from the paper
+#    assert np.allclose(star.oneSigmaNoise,) # todo - calc from the paper
+    assert star.TmagProvenance == 'J/Ks'
+
+
+
+
+
+
+
+
+
+
