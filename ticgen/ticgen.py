@@ -272,7 +272,7 @@ def ticgen(args=None):
                             default=60,
                             help="Specify the integration time in minutes time "
                             "to calculate the noise on. This assumes "
-                            " noise scales with the inverse square-root "
+                            "noise scales with the inverse square-root "
                             "of the integration time. "
                             "(default: 60")
         args = parser.parse_args(args)
@@ -280,6 +280,26 @@ def ticgen(args=None):
 
     _output = calc_star(args)
 
+
+def ticgen_fromfile(args=None):
+    """
+    exposes ticgen_from_file to the command line
+    """
+    if args is None:
+        parser = argparse.ArgumentParser(
+            description="")
+        parser.add_argument('filename', nargs=1,
+                            help="Path to a csv file that lists known "
+                                 "magnitudes of targets (one target per line). "
+                                 "The file should contain a header with "
+                                 "columns listing the magnitudes")
+        parser.add_argument('-i', '--integration', type=float,
+                            default=60,
+                            help="Specify the integration time in minutes time "
+                            "to calculate the noise on. This assumes "
+                            "noise scales with the inverse square-root "
+                            "of the integration time. "
+                            "(default: 60")
 
 def calc_star(args):
     """Returns the TESS magnitude and 1-sigma noise in ppm.

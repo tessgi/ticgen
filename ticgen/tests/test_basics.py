@@ -9,6 +9,7 @@ def test_import():
     from ticgen import calc_star
     from ticgen import ticgen
     from ticgen import Star
+    from ticgen import ticgen_fromfile
 
 
 def test_VJKs():
