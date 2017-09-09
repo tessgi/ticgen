@@ -152,7 +152,7 @@ class Star(object):
         assert ((self.Jmag is not None) & (self.Ksmag is not None) &
                 (self.Bphmag is not None))
         X = self.Bphmag - self.Ksmag
-        return (self.Jmag + 0.0178 * X**3 - 0.01780 * X**2 +
+        return (self.Jmag + 0.00178 * X**3 - 0.01780 * X**2 +
                 0.31926 * X + 0.0381)
 
     def TESS_Mag_BJKs(self):
@@ -182,7 +182,7 @@ class Star(object):
         assert ((self.Jmag is not None) & (self.Ksmag is not None))
         X = self.Jmag - self.Ksmag
         if (X > 0.7) and (X <= 1.0):
-            return (self.Jmag + 269.372 * X**3 +
+            return (self.Jmag - 269.372 * X**3 +
                     668.453 * X**2 - 545.64 * X + 147.811)
         elif (X <= 0.7) & (X >= -0.1):
             return (self.Jmag + 1.22163 * X**3 - 1.74299 * X**2 +
