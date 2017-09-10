@@ -5,7 +5,8 @@ A tool for calculating a TESS magnitude, and an expected noise level for stars t
 
 [![Build Status](https://travis-ci.org/tessgi/ticgen.svg?branch=master)](https://travis-ci.org/tessgi/ticgen)
 [![PyPI](http://img.shields.io/pypi/v/ticgen.svg)](https://pypi.python.org/pypi/ticgen/)
-<!-- [![DOI](https://zenodo.org/badge/94136696.svg)](https://zenodo.org/badge/latestdoi/94136696) -->
+[![DOI](https://zenodo.org/badge/102482488.svg)](https://zenodo.org/badge/latestdoi/102482488)
+
 
 ## Installation
 You can install using pip
@@ -81,7 +82,7 @@ This code is build using the algorithms from the TESS Input Catalog publication 
 ## Citation
 If you find this code useful and want to cite it in your research then we have made that possible for you
 ```
-
+Jaffe, T. J. & Barclay, T. 2017, ticgen: A tool for calculating a TESS magnitude, and an expected noise level for stars to be observed by TESS., v1.0.0, Zenodo, doi:10.5281/zenodo.888217
 ```
 Please also cite [Stassun et al. (2017)](https://arxiv.org/abs/1706.00495) who developed the algorithms underlying this code.
                  
