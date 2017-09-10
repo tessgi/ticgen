@@ -21,4 +21,5 @@ class Highlight:
         END = '\033[0m'
 
 # this needs to come after the Highlight import
-from .ticgen import ticgen, calc_star, Star, ticgen_fromfile
+from .ticgen import ticgen, calc_star, Star, ticgen_csv
+PACKAGEDIR = os.path.dirname(os.path.abspath(__file__))

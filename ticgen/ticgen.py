@@ -3,7 +3,8 @@ import numpy as np
 import argparse
 from . import Highlight
 from . import logger
-
+import pandas as pd
+import sys
 
 # class Highlight:
 #     # if os.path.basename(__main__.__file__).strip(".py").startswith("wtg"):
@@ -37,43 +38,27 @@ class Star(object):
             self.oneSigmaNoise = self.get_oneSigmaNoise()
         else:
             if ((Vmag is not None) & (Jmag is not None) &
-                    (Ksmag is not None) & ((Jmag - Ksmag) <= 1.0) &
-                                          ((Jmag - Ksmag) >= -0.1)):
-                self.TmagProvenance = 'V/J/Ks'
-                self.Vmag = Vmag
-                self.Jmag = Jmag
-                self.Ksmag = Ksmag
-                self.Tmag = self.TESS_Mag_VJKs()
-                self.oneSigmaNoise = self.get_oneSigmaNoise()
+                    (Ksmag is not None)):
+                if (((Jmag - Ksmag) <= 1.0) &
+                        ((Jmag - Ksmag) >= -0.1)):
+                    self.set_VJKs(Vmag, Jmag, Ksmag)
+                elif (Bphmag is not None):
+                    self.set_BphJKs(Bphmag, Jmag, Ksmag)
+                elif (Bmag is not None):
+                    self.set_BJKs(Bmag, Jmag, Ksmag)
+                else:
+                    self.set_JKs(Jmag, Ksmag)
             elif ((Bphmag is not None) & (Jmag is not None) &
                   (Ksmag is not None)):
-                self.TmagProvenance = 'Bph/J/Ks'
-                self.Bphmag = Bphmag
-                self.Jmag = Jmag
-                self.Ksmag = Ksmag
-                self.Tmag = self.TESS_Mag_BphJKs()
-                self.oneSigmaNoise = self.get_oneSigmaNoise()
+                self.set_BphJKs(Bphmag, Jmag, Ksmag)
             elif (Bmag is not None) & (Jmag is not None) & (Ksmag is not None):
-                self.TmagProvenance = 'B/J/Ks'
-                self.Bmag = Bmag
-                self.Jmag = Jmag
-                self.Ksmag = Ksmag
-                self.Tmag = self.TESS_Mag_BJKs()
-                self.oneSigmaNoise = self.get_oneSigmaNoise()
+                self.set_BJKs(Bmag, Jmag, Ksmag)
             elif (Jmag is not None) & (Ksmag is not None):
-                self.TmagProvenance = 'J/Ks'
-                self.Jmag = Jmag
-                self.Ksmag = Ksmag
-                self.Tmag = self.TESS_Mag_JKs()
-                self.oneSigmaNoise = self.get_oneSigmaNoise()
+                self.set_JKs(Jmag, Ksmag)
             elif (Jmag is not None) & (Gmag is not None):
-                self.TmagProvenance = 'J/Gaia'
-                self.Jmag = Jmag
-                self.Gmag = Gmag
-                self.Tmag = self.TESS_Mag_JG()
-                self.oneSigmaNoise = self.get_oneSigmaNoise()
+                self.set_GJ(Gmag, Jmag)
             elif (Vmag is not None) & (Jmag is not None) & (Hmag is not None):
-                self.TmagProvenance = 'V/J/Ks'
+                self.TmagProvenance = 'V/J/H'
                 self.Vmag = Vmag
                 self.Jmag = Jmag
                 self.Hmag = Hmag
@@ -100,7 +85,7 @@ class Star(object):
                 self.Hmag = Hmag
                 self.Tmag = self.TESS_Mag_H()
                 self.oneSigmaNoise = self.get_oneSigmaNoise()
-            elif (Jmag is not None) & (Hmag is not None):
+            elif (Ksmag is not None):
                 self.TmagProvenance = 'Ks'
                 self.Ksmag = Ksmag
                 self.Tmag = self.TESS_Mag_Ks()
@@ -109,6 +94,44 @@ class Star(object):
                 self.Tmag = None
                 self.TmagProvenance = 'Could not calculate'
                 self.oneSigmaNoise = np.nan
+
+    def set_VJKs(self, Vmag, Jmag, Ksmag):
+        self.TmagProvenance = 'V/J/Ks'
+        self.Vmag = Vmag
+        self.Jmag = Jmag
+        self.Ksmag = Ksmag
+        self.Tmag = self.TESS_Mag_VJKs()
+        self.oneSigmaNoise = self.get_oneSigmaNoise()
+
+    def set_BphJKs(self, Bphmag, Jmag, Ksmag):
+        self.TmagProvenance = 'Bph/J/Ks'
+        self.Bphmag = Bphmag
+        self.Jmag = Jmag
+        self.Ksmag = Ksmag
+        self.Tmag = self.TESS_Mag_BphJKs()
+        self.oneSigmaNoise = self.get_oneSigmaNoise()
+
+    def set_BJKs(self, Bmag, Jmag, Ksmag):
+        self.TmagProvenance = 'B/J/Ks'
+        self.Bmag = Bmag
+        self.Jmag = Jmag
+        self.Ksmag = Ksmag
+        self.Tmag = self.TESS_Mag_BJKs()
+        self.oneSigmaNoise = self.get_oneSigmaNoise()
+
+    def set_JKs(self, Jmag, Ksmag):
+        self.TmagProvenance = 'J/Ks'
+        self.Jmag = Jmag
+        self.Ksmag = Ksmag
+        self.Tmag = self.TESS_Mag_JKs()
+        self.oneSigmaNoise = self.get_oneSigmaNoise()
+
+    def set_GJ(self, Gmag, Jmag):
+        self.TmagProvenance = 'J/Gaia'
+        self.Jmag = Jmag
+        self.Gmag = Gmag
+        self.Tmag = self.TESS_Mag_GJ()
+        self.oneSigmaNoise = self.get_oneSigmaNoise()
 
     def get_oneHourNoiseLnsigma(self):
         """
@@ -281,14 +304,24 @@ def ticgen(args=None):
     _output = calc_star(args)
 
 
-def ticgen_fromfile(args=None):
+def ticgen_csv(args=None):
     """
-    exposes ticgen_from_file to the command line
+    exposes ticgen_csv to the command line
     """
     if args is None:
         parser = argparse.ArgumentParser(
-            description="")
-        parser.add_argument('filename', nargs=1,
+            description="Calculate TESS noise level and TESS magnitude. "
+                        "This work is all based upon the TESS Input v5 catalog "
+                        "paper by Stassun, et al (https://arxiv.org/abs/1706.00495). "
+                        "A user must give a filepath for a csv file with "
+                        "columns containing magnitudes. The code reads the headers. "
+                        "Header options are Tmag, Vmag, Jmag, Bmag, Bphmag, "
+                        "Ksmag, Hmag, and Gmag. The code will return a file "
+                        "with columns Tmag and one-sigma noise in "
+                        "parts-per-million. The user can optionally "
+                        "supply an integration time to calculate the noise on "
+                        "(the default is 60 minutes)")
+        parser.add_argument('input_fn',
                             help="Path to a csv file that lists known "
                                  "magnitudes of targets (one target per line). "
                                  "The file should contain a header with "
@@ -300,6 +333,57 @@ def ticgen_fromfile(args=None):
                             "noise scales with the inverse square-root "
                             "of the integration time. "
                             "(default: 60")
+        args = parser.parse_args(args)
+        args = vars(args)
+    else:
+        if 'integration' not in args.keys():
+            args['integration'] = 60
+
+    mags = parse_file(args['input_fn'])
+
+    output_arr = np.zeros([mags.shape[0], 2])
+    for i in range(mags.shape[0]):
+        magdict = mags.iloc[i].to_dict()
+        # change nans to None
+        for k, v in magdict.items():
+            if np.isnan(v):
+                magdict[k] = None
+        star = Star(integration=args['integration'],
+                                        **magdict)
+        output_arr[i] = star.Tmag, star.oneSigmaNoise
+    output_fn = args['input_fn'] + '-ticgen.csv'
+    np.savetxt(output_fn, output_arr, delimiter=', ',
+                   fmt=['%10.3f', '%10.3f'])
+
+
+def parse_file(infile):
+    """Parse a comma-separated file.
+    """
+    try:
+        mags = pd.read_csv(infile,)
+    except FileNotFoundError as e:
+        logger.error("There seems to be a problem with the input file, "
+                     "please check the filename and location")
+        sys.exit(1)
+    except Exception as e:
+        logger.error("There seems to be a problem with the input file, "
+                     "please check the file format")
+        raise e
+
+    good_cnames = np.array(['Tmag', 'Vmag',
+                    'Jmag', 'Bmag', 'Bphmag',
+                    'Ksmag', 'Hmag', 'Gmag'])
+    for cname in mags.columns.values:
+        if cname not in good_cnames:
+            logger.error("Unrecognized column {} found. ".format(cname) +
+                         "Column names can only be be "+
+                         "Tmag, Vmag, Jmag, Bmag, Bphmag, "+
+                         "Ksmag, Hmag, Gmag")
+            sys.exit(1)
+    return mags
+
+
+
 
 def calc_star(args):
     """Returns the TESS magnitude and 1-sigma noise in ppm.

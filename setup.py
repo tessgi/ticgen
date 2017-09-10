@@ -9,7 +9,7 @@ exec(open('ticgen/version.py').read())
 # Command-line tools
 entry_points = {'console_scripts': [
     'ticgen = ticgen.ticgen:ticgen',
-    'ticgen-fromfile = ticgen.ticgen:ticgen_fromfile',
+    'ticgen-fromfile = ticgen.ticgen:ticgen_csv',
 ]}
 
 setup(name='ticgen',

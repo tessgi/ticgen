@@ -2,6 +2,8 @@
 To run, simply type "py.test".
 """
 import numpy as np
+import os
+import argparse
 
 def test_import():
     """Can we import tvguide successfully?"""
@@ -9,7 +11,7 @@ def test_import():
     from ticgen import calc_star
     from ticgen import ticgen
     from ticgen import Star
-    from ticgen import ticgen_fromfile
+    from ticgen import ticgen_csv
 
 
 def test_VJKs():
@@ -96,6 +98,44 @@ def test_noise():
     for i, Tmag in enumerate(range(0, 30, 1)):
         star = Star(Tmag=Tmag)
         assert np.allclose(star.oneSigmaNoise, Tmag_arr[i])
+
+def test_csv():
+    from ticgen import ticgen_csv
+    import pandas as pd
+    THISDIR = os.path.dirname(os.path.abspath(__file__))
+    infn = os.path.join(THISDIR,
+        "fromfile_test.csv")
+    infn_bad = os.path.join(THISDIR,
+        "fromfile_test_badfile.csv")
+    outfn = os.path.join(THISDIR,
+        "fromfile_test.csv-ticgen.csv")
+    knownfile = os.path.join(THISDIR,
+        "fromfile_test.csv-ticgen.csv-TEST")
+    ticgen_csv(args={'input_fn': infn})
+    os.path.isfile(outfn)
+
+    testfile = pd.read_csv(knownfile, names=['A', 'B'], 
+        skipinitialspace=True)
+    newfile = pd.read_csv(outfn, names=['A', 'B'], 
+        skipinitialspace=True)
+    for l in range(10,200,5):
+        assert np.allclose(
+            testfile.iloc[l], newfile.iloc[l],
+            equal_nan=True)
+
+    try:
+        ticgen_csv(args={'input_fn': infn_bad})
+        raise 'Should fail here Error'
+    except SystemExit:
+        pass
+
+    try:
+        ticgen_csv(args={'input_fn': 'doesnt_exist'})
+        raise 'Should fail here Error'
+    except SystemExit:
+        pass
+
+
 
 
 # array of Tmags range(0,30,1)
