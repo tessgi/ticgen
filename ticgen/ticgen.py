@@ -287,11 +287,12 @@ def ticgen(args=None):
                             help="B photgraphic magnitude of the source")
         parser.add_argument('-i', '--integration', type=float,
                             default=60,
-                            help="Specify the integration time in minutes time "
-                            "to calculate the noise on. This assumes "
+                            help="Specify the integration time in minutes. "
+                            "this will be used "
+                            "to calculate the noise. This assumes "
                             "noise scales with the inverse square-root "
                             "of the integration time. "
-                            "(default: 60")
+                            "(default: 60)")
         args = parser.parse_args(args)
         args = vars(args)
 

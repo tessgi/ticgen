@@ -31,3 +31,45 @@ $ ticgen -V 7.5 -J 12.0 -Ks 11.5
 TESS mag = 10.09, calculated using V/J/Ks.
 1-sigma scatter in 60 min = 212 ppm.
 ```
+You can provide any combination of these mangitudes
+*  -T TMAG, --Tmag TMAG  TESS magnitude of the source
+*  -J JMAG, --Jmag JMAG  J magnitude of the source
+*  -K KSMAG, --Ksmag KSMAG Ks magnitude of the source
+*  -V VMAG, --Vmag VMAG  V magnitude of the source
+*  -G GMAG, --Gmag GMAG  Gaia magnitude of the source
+*  -H HMAG, --Hmag HMAG  H magnitude of the source
+*  -B BMAG, --Bmag BMAG  B magnitude of the source
+*  --Bphmag BPHMAG       B photgraphic magnitude of the source
+
+You can also specify the integration time in minutes. This will be used to calculate the noise. This assumes noise scales with the inverse square-root of the integration time. (default: 60)
+*  -i INTEGRATION, --integration INTEGRATION
+
+You can also run on a csvfile with magnitudes.
+The header of the file must contain one or more of 
+Tmag, Vmag, Jmag, Bmag, Bphmag, Ksmag, Hmag, and Gmag. Not all the magnitues need to be included in the file and the columns can be in any order.
+
+A new csv file will be created with two columns: TESS mag and 1-sigma noise level in parts-per-million.
+
+Here is an example of an acceptable file
+```
+Tmag,Vmag,Jmag,Bmag,Bphmag,Ksmag,Hmag,Gmag
+12.0,,,,,,,
+,11.5,8.1,,,6.7,,
+,,,,,,16.0,
+,,12.0,12.0,,8.6,,
+```
+
+and this would output
+```
+    12.000,    595.007
+     9.850,    188.867
+    16.700,  32331.695
+    12.872,   1030.614
+```
+
+
+
+
+                 
+
+
