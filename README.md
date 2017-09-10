@@ -68,7 +68,7 @@ Tmag,Vmag,Jmag,Bmag,Bphmag,Ksmag,Hmag,Gmag
 
 and this would output
 ```
-\# Tmag, 1-sigma noise (ppm)
+# Tmag, 1-sigma noise (ppm)
     12.000,    595.007
      9.850,    188.867
     16.700,  32331.695
