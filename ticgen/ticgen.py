@@ -6,6 +6,12 @@ from . import logger
 import pandas as pd
 import sys
 
+try:
+    FileNotFoundError
+except NameError:
+    # py2
+    FileNotFoundError = IOError
+
 
 class Star(object):
     """
