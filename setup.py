@@ -3,6 +3,12 @@ import sys
 import os
 from setuptools import setup
 
+if "publish" in sys.argv[-1]:
+    os.system("python setup.py sdist")
+    os.system("twine upload dist/*")
+    os.system("rm -rf dist/*")
+    sys.exit()
+
 # Load the __version__ variable without importing the package
 exec(open('ticgen/version.py').read())
 
