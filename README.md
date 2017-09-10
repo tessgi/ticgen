@@ -76,9 +76,14 @@ and this would output
 ```
 
 ## Further Documentation
-This code is build using the algorithms from the TESS Input Catalog publication from [Stassun et al. (2017)](https://arxiv.org/abs/1706.00495). 
+This code is build using the algorithms from the TESS Input Catalog publication from [Stassun et al. (2017)](https://arxiv.org/abs/1706.00495).
 
+## Citation
+If you find this code useful and want to cite it in your research then we have made that possible for you
+```
 
+```
+Please also cite [Stassun et al. (2017)](https://arxiv.org/abs/1706.00495) who developed the algorithms underlying this code.
                  
 
 
