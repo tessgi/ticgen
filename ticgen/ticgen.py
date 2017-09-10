@@ -347,8 +347,10 @@ def ticgen_csv(args=None):
                                         **magdict)
         output_arr[i] = star.Tmag, star.oneSigmaNoise
     output_fn = args['input_fn'] + '-ticgen.csv'
+    hdr = 'Tmag, 1-sigma noise (ppm)'
     np.savetxt(output_fn, output_arr, delimiter=', ',
-               fmt=['%10.3f', '%10.3f'])
+               fmt=['%10.3f', '%10.3f'],
+               header=hdr)
 
 
 def parse_file(infile):

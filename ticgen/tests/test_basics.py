@@ -115,9 +115,11 @@ def test_csv():
     os.path.isfile(outfn)
 
     testfile = pd.read_csv(knownfile, names=['A', 'B'], 
-        skipinitialspace=True)
+        skipinitialspace=True,
+        skiprows=1)
     newfile = pd.read_csv(outfn, names=['A', 'B'], 
-        skipinitialspace=True)
+        skipinitialspace=True,
+        skiprows=1)
     for l in range(10,200,5):
         assert np.allclose(
             testfile.iloc[l], newfile.iloc[l],
