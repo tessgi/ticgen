@@ -44,6 +44,13 @@ You can provide any combination of these mangitudes
 You can also specify the integration time in minutes. This will be used to calculate the noise. This assumes noise scales with the inverse square-root of the integration time. (default: 60)
 *  -i INTEGRATION, --integration INTEGRATION
 
+```
+ticgen --Tmag 18.0 --integration 1440
+
+TESS mag = 18.00, calculated using Tmag was provided.
+1-sigma scatter in 1440 min = 51045 ppm.
+```
+
 You can also run on a csvfile with magnitudes.
 The header of the file must contain one or more of 
 Tmag, Vmag, Jmag, Bmag, Bphmag, Ksmag, Hmag, and Gmag. Not all the magnitues need to be included in the file and the columns can be in any order.
