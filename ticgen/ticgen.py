@@ -351,6 +351,8 @@ def ticgen_csv(args=None):
     np.savetxt(output_fn, output_arr, delimiter=', ',
                fmt=['%10.3f', '%10.3f'],
                header=hdr)
+    logger.info('Created new file {}'.format(output_fn))
+    print('Created a new file: {}'.format(output_fn))
 
 
 def parse_file(infile):
