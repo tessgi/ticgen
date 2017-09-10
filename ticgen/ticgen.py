@@ -144,7 +144,7 @@ class Star(object):
                 E * self.Tmag**4 + F * self.Tmag**5)
 
     def get_oneSigmaNoise(self):
-        return (np.exp(self.get_oneHourNoiseLnsigma()) *
+        return (np.exp(self.get_oneHourNoiseLnsigma()) /
                 np.sqrt(self.integration / 60.))
 
     def TESS_Mag_VJKs(self):
