@@ -6,18 +6,6 @@ from . import logger
 import pandas as pd
 import sys
 
-# class Highlight:
-#     # if os.path.basename(__main__.__file__).strip(".py").startswith("wtg"):
-#     #     RED=GREEN=YELLOW=BLUE=PURPLE=CYAN=END=""
-#     # else:
-#         """Defines colors for highlighting words in the terminal."""
-#         RED = "\033[0;31m"
-#         GREEN = "\033[0;32m"
-#         YELLOW = "\033[0;33m"
-#         BLUE = "\033[0;34m"
-#         PURPLE = "\033[0;35m"
-#         CYAN = "\033[0;36m"
-#         END = '\033[0m'
 
 class Star(object):
     """
@@ -353,7 +341,7 @@ def ticgen_csv(args=None):
         output_arr[i] = star.Tmag, star.oneSigmaNoise
     output_fn = args['input_fn'] + '-ticgen.csv'
     np.savetxt(output_fn, output_arr, delimiter=', ',
-                   fmt=['%10.3f', '%10.3f'])
+               fmt=['%10.3f', '%10.3f'])
 
 
 def parse_file(infile):
@@ -371,8 +359,8 @@ def parse_file(infile):
         raise e
 
     good_cnames = np.array(['Tmag', 'Vmag',
-                    'Jmag', 'Bmag', 'Bphmag',
-                    'Ksmag', 'Hmag', 'Gmag'])
+                            'Jmag', 'Bmag', 'Bphmag',
+                            'Ksmag', 'Hmag', 'Gmag'])
     for cname in mags.columns.values:
         if cname not in good_cnames:
             logger.error("Unrecognized column {} found. ".format(cname) +
@@ -381,8 +369,6 @@ def parse_file(infile):
                          "Ksmag, Hmag, Gmag")
             sys.exit(1)
     return mags
-
-
 
 
 def calc_star(args):
