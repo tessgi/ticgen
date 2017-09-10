@@ -75,7 +75,8 @@ and this would output
     12.872,   1030.614
 ```
 
-
+## Further Documentation
+This code is build using the algorithms from the TESS Input Catalog publication from [Stassun et al. (2017)](https://arxiv.org/abs/1706.00495). 
 
 
                  

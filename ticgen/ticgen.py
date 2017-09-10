@@ -382,19 +382,30 @@ def parse_file(infile):
 
 def calc_star(args):
     """Returns the TESS magnitude and 1-sigma noise in ppm.
+    
+    this function takes a dictionary. The paramters below
+    should be key, value pairs in the dictionary.
 
     Parameters
     ----------
-    Tmag : float
-        Right Ascension (J2000) in decimal degrees.
-
-    dec_deg : float
-        Declination (J2000) in decimal degrees.
-
-    padding : float
-        Target must be at least `padding` pixels away from the edge of the
-        superstamp. (Note that CCD boundaries are not considered as edges
-        in this case.)
+    Tmag : float, optional
+        TESS magnitude of the source
+    Jmag : float, optional
+        J magnitude of the source
+    Ksmag : float, optional
+        Ks magnitude of the source
+    Vmag : float, optional
+        V magnitude of the source
+    Gmag : float, optional
+        Gaia magnitude of the source
+    Hmag : float, optional
+        H magnitude of the source
+    Bmag : float, optional
+        B magnitude of the source
+    Bphmag : float, optional
+        B photographic magnitude of the source
+    integration : float, optional
+        integration time in minutes
 
     Returns
     -------
