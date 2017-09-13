@@ -69,7 +69,7 @@ Tmag,Vmag,Jmag,Bmag,Bphmag,Ksmag,Hmag,Gmag
 
 and the calling pattern would be
 ```
-ticgen-csv myfile.csv
+ticgen-csv  mycsvfile.csv
 ```
 
 and this would output
