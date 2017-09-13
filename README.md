@@ -67,6 +67,11 @@ Tmag,Vmag,Jmag,Bmag,Bphmag,Ksmag,Hmag,Gmag
 ,,12.0,12.0,,8.6,,
 ```
 
+and the calling pattern would be
+```
+ticgen-csv myfile.csv
+```
+
 and this would output
 ```
 # Tmag, 1-sigma noise (ppm)
