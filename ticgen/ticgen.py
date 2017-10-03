@@ -401,7 +401,7 @@ def parse_file(infile):
     """Parse a comma-separated file.
     """
     try:
-        mags = pd.read_csv(infile,)
+        mags = pd.read_csv(infile, skipinitialspace=True)
     except FileNotFoundError as e:
         logger.error("There seems to be a problem with the input file, "
                      "please check the filename and location")

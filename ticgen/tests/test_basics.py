@@ -138,6 +138,31 @@ def test_csv():
         pass
 
 
+def test_space_in_file():
+    from ticgen import ticgen_csv
+    import pandas as pd
+    THISDIR = os.path.dirname(os.path.abspath(__file__))
+    infn = os.path.join(THISDIR,
+        "fromfile_test_space.csv")
+    outfn = os.path.join(THISDIR,
+        "fromfile_test_space.csv-ticgen.csv")
+    knownfile = os.path.join(THISDIR,
+        "fromfile_test.csv-ticgen.csv-TEST")
+    ticgen_csv(args={'input_fn': infn})
+    os.path.isfile(outfn)
+
+    testfile = pd.read_csv(knownfile, names=['A', 'B'], 
+        skipinitialspace=True,
+        skiprows=1)
+    newfile = pd.read_csv(outfn, names=['A', 'B'], 
+        skipinitialspace=True,
+        skiprows=1)
+    for l in range(10,200,5):
+        assert np.allclose(
+            testfile.iloc[l], newfile.iloc[l],
+            equal_nan=True)
+
+
 
 
 # array of Tmags range(0,30,1)
