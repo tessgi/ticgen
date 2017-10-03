@@ -114,15 +114,14 @@ def test_csv():
     ticgen_csv(args={'input_fn': infn})
     os.path.isfile(outfn)
 
-    testfile = pd.read_csv(knownfile, names=['A', 'B'], 
+    testfile = pd.read_csv(knownfile, names=['A', 'B'],
         skipinitialspace=True,
         skiprows=1)
-    newfile = pd.read_csv(outfn, names=['A', 'B'], 
+    newfile = pd.read_csv(outfn, names=['A', 'B'],
         skipinitialspace=True,
         skiprows=1)
-    for l in range(10,200,5):
-        assert np.allclose(
-            testfile.iloc[l], newfile.iloc[l],
+    assert np.allclose(
+            testfile.A, newfile.A,
             equal_nan=True)
 
     try:
@@ -151,16 +150,76 @@ def test_space_in_file():
     ticgen_csv(args={'input_fn': infn})
     os.path.isfile(outfn)
 
-    testfile = pd.read_csv(knownfile, names=['A', 'B'], 
+    testfile = pd.read_csv(knownfile, names=['A', 'B'],
         skipinitialspace=True,
         skiprows=1)
-    newfile = pd.read_csv(outfn, names=['A', 'B'], 
+    newfile = pd.read_csv(outfn, names=['A', 'B'],
         skipinitialspace=True,
         skiprows=1)
-    for l in range(10,200,5):
-        assert np.allclose(
-            testfile.iloc[l], newfile.iloc[l],
+    assert np.allclose(
+            testfile.A, newfile.A,
             equal_nan=True)
+
+
+def test_nomag():
+    from ticgen import ticgen_csv
+    import pandas as pd
+    THISDIR = os.path.dirname(os.path.abspath(__file__))
+    infn = os.path.join(THISDIR,
+        "fromfile_test_noTmag.csv")
+    outfn = os.path.join(THISDIR,
+        "fromfile_test_noTmag.csv-ticgen.csv")
+    knownfile = os.path.join(THISDIR,
+        "fromfile_test.csv-ticgen.csv-TEST")
+    ticgen_csv(args={'input_fn': infn})
+    os.path.isfile(outfn)
+
+    testfile = pd.read_csv(knownfile, names=['A', 'B'],
+        skipinitialspace=True,
+        skiprows=1)
+    newfile = pd.read_csv(outfn, names=['A', 'B'],
+        skipinitialspace=True,
+        skiprows=1)
+    # only search the first 130 rows because the remaining are different
+    # from the standard because we removed tmag
+    for l in range(10,120,5):
+        assert np.allclose(
+                testfile.A[l], newfile.A[l],
+                equal_nan=True)
+
+
+def test_case_from_jpl_person():
+    from ticgen import ticgen_csv
+    import pandas as pd
+    THISDIR = os.path.dirname(os.path.abspath(__file__))
+    infn1 = os.path.join(THISDIR,
+        "fromfile_jpl1.csv")
+    outfn1 = os.path.join(THISDIR,
+        "fromfile_jpl1.csv-ticgen.csv")
+    infn2 = os.path.join(THISDIR,
+        "fromfile_jpl2.csv")
+    outfn2 = os.path.join(THISDIR,
+        "fromfile_jpl2.csv-ticgen.csv")
+
+    ticgen_csv(args={'input_fn': infn1})
+    os.path.isfile(outfn1)
+
+    ticgen_csv(args={'input_fn': infn2})
+    os.path.isfile(outfn2)
+
+    testfile1 = pd.read_csv(outfn1, names=['A', 'B'],
+        skipinitialspace=True,
+        skiprows=1)
+    testfile2 = pd.read_csv(outfn2, names=['A', 'B'],
+        skipinitialspace=True,
+        skiprows=1)
+    assert np.allclose(
+            testfile1.A, testfile2.A,
+            equal_nan=True)
+    assert np.allclose(
+            testfile1.B, testfile2.B,
+            equal_nan=True)
+
 
 
 

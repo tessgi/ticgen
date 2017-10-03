@@ -359,8 +359,10 @@ def ticgen_csv(args=None):
     np.savetxt(output_fn, output_arr, delimiter=', ',
                fmt=['%10.3f', '%10.3f'],
                header=hdr)
-    logger.info('Created new file {}'.format(output_fn))
-    print('Created a new file: {}'.format(output_fn))
+    logger.info('Created new file {}, using {}'.format(
+        output_fn, star.TmagProvenance))
+    print('Created a new file: {}, using {}'.format(
+        output_fn, star.TmagProvenance))
 
 
 # def ticgen_name(args=None):
@@ -401,7 +403,8 @@ def parse_file(infile):
     """Parse a comma-separated file.
     """
     try:
-        mags = pd.read_csv(infile, skipinitialspace=True)
+        mags = pd.read_csv(infile, skipinitialspace=True,
+            index_col=False)
     except FileNotFoundError as e:
         logger.error("There seems to be a problem with the input file, "
                      "please check the filename and location")
@@ -421,6 +424,7 @@ def parse_file(infile):
                          "Tmag, Vmag, Jmag, Bmag, Bphmag, "+
                          "Ksmag, Hmag, Gmag")
             sys.exit(1)
+    logger.info(mags)
     return mags
 
 
