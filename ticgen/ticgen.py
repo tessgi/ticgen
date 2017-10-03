@@ -6,6 +6,14 @@ from . import logger
 import pandas as pd
 import sys
 
+# try:
+#     from astroquery import Simbad
+#     hasAstroquery = True
+# except ImportError:
+#     logger.info('Astroquery not installed')
+#     hasAstroquery = False
+
+
 try:
     FileNotFoundError
 except NameError:
@@ -353,6 +361,40 @@ def ticgen_csv(args=None):
                header=hdr)
     logger.info('Created new file {}'.format(output_fn))
     print('Created a new file: {}'.format(output_fn))
+
+
+# def ticgen_name(args=None):
+#     """
+#     exposes ticgen_name to the command line
+#     """
+#     if not hasAstroquery:
+#         logger.error("Astroquery must be installed to seach on a target name")
+#         sys.exit(1)
+
+#     if args is None:
+#         parser = argparse.ArgumentParser(
+#             description="Calculate TESS noise level and TESS magnitude. "
+#                         "This work is all based upon the TESS Input v5 catalog "
+#                         "paper by Stassun, et al (https://arxiv.org/abs/1706.00495). "
+#                         "A user must give a name of a target "
+#                         "which is parsed by Simbad. The user can optionally "
+#                         "supply an integration time to calculate the noise on "
+#                         "(the default is 60 minutes)")
+#         parser.add_argument('target_name',
+#                             help="Name of an astronomical source "
+#                                  "to be parsed by Simbad")
+#         parser.add_argument('-i', '--integration', type=float,
+#                             default=60,
+#                             help="Specify the integration time in minutes time "
+#                             "to calculate the noise on. This assumes "
+#                             "noise scales with the inverse square-root "
+#                             "of the integration time. "
+#                             "(default: 60")
+#         args = parser.parse_args(args)
+#         args = vars(args)
+#     else:
+#         if 'integration' not in args.keys():
+#             args['integration'] = 60
 
 
 def parse_file(infile):
