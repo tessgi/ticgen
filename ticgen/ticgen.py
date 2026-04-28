@@ -31,7 +31,7 @@ class Star(object):
 
     def __init__(self, Tmag=None, Vmag=None,
                  Jmag=None, Ksmag=None, Bphmag=None, Bmag=None,
-                 Gmag=None, Hmag=None,
+                 Gmag=None, Hmag=None, G_BP=None, G_RP=None,
                  integration=60.):
         self.integration = integration
         if Tmag is not None:
@@ -59,6 +59,10 @@ class Star(object):
                 self.set_JKs(Jmag, Ksmag)
             elif (Jmag is not None) & (Gmag is not None):
                 self.set_GJ(Gmag, Jmag)
+            elif (Gmag is not None) & (G_BP is not None) & (G_RP is not None):
+                self.set_GGbpGrp(Gmag, G_BP, G_RP)
+            elif (Gmag is not None):
+                self.set_G(Gmag)
             elif (Vmag is not None) & (Jmag is not None) & (Hmag is not None):
                 self.TmagProvenance = 'V/J/H'
                 self.Vmag = Vmag
@@ -134,12 +138,25 @@ class Star(object):
         self.Gmag = Gmag
         self.Tmag = self.TESS_Mag_GJ()
         self.oneSigmaNoise = self.get_oneSigmaNoise()
+    
+    def set_GGbpGrp(self, Gmag, G_BP, G_RP):
+        self.TmagProvenance = 'Gaia'
+        self.Gmag = Gmag
+        self.G_BP = G_BP
+        self.G_RP = G_RP
+        self.Tmag = self.TESS_Mag_GGbpGrp()
+        self.oneSigmaNoise = self.get_oneSigmaNoise()
+    
+    def set_G(self, Gmag):
+        self.TmagProvenance = 'Gaia_simple'
+        self.Gmag = Gmag
+        self.Tmag = self.TESS_Mag_G()
+        self.oneSigmaNoise = self.get_oneSigmaNoise()
 
     def get_oneHourNoiseLnsigma(self):
         """
-        TESS photometric error estimate [ppm] based on
-        magnitude and Eq. on bottom of P24 of
-        arxiv.org/pdf/1706.00495.pdf
+        Simple TESS photometric error estimate [ppm] 
+        based on Fig. 14 of arxiv.org/abs/1506.03845
         """
         F = 4.73508403525e-5
         E = -0.0022308015894
@@ -189,18 +206,6 @@ class Star(object):
         return (self.Jmag + 0.00226 * X**3 - 0.02313 * X**2 +
                 0.29688 * X + 0.0407)
 
-    # def TESS_Mag_JKs_lt0p7(J, Ks, debug=False):
-    #     """ TESS magnitude estimate based on magnitude and
-    #     Eq. on p5 of arxiv.org/pdf/1706.00495.pdf"""
-    #     X = J - Ks
-    #     return J + 1.22163 * X**3 - 1.74299 * X**2 + 1.89115 * X + 0.0563
-
-    # def TESS_Mag_JKs_gt0p7(J, Ks, debug=False):
-    #     """ TESS magnitude estimate based on magnitude and
-    #     Eq. on p5 of arxiv.org/pdf/1706.00495.pdf"""
-    #     X = J - Ks
-    #     return J + 269.372 * X**3 + 668.453 * X**2 - 545.64 * X + 147.811
-
     def TESS_Mag_JKs(self):
         """ TESS magnitude estimate based on magnitude and
         Eq. on p5 of arxiv.org/pdf/1706.00495.pdf"""
@@ -224,6 +229,34 @@ class Star(object):
         X = self.Gmag - self.Jmag
         return (self.Gmag + 0.00106 * X**3 + 0.01278 * X**2 -
                 0.46022 * X + 0.0211)
+    
+    def TESS_Mag_GGbpGrp(self):
+        """ TESS magnitude estimate updated eqn 1 
+        from https://arxiv.org/abs/1905.10694
+        """
+        assert ((self.Gmag is not None) & (self.G_BP is not None) & (self.G_RP is not None))
+        X = self.G_BP - self.G_RP
+        if (X > -0.1) & (X < 6.0):
+            return (self.Gmag - 0.00522555 * X**3 + 0.0891337 * X**2 - 
+                    0.633923 * X + 0.0324473)
+        else:
+            self.TmagProvenance = 'Gaia_simple'
+            return TESS_mag_G()
+        
+    def TESS_Mag_G(self):
+        """Simplified TESS magnitude estimate using only G from
+        eqn 2 in https://arxiv.org/abs/1905.10694
+        """
+        assert self.Gmag is not None
+        return (self.Gmag - 0.43)
+    
+    def V_Mag_GGbpGrp(self):
+        """V magnitude updated estimate from eqn 3 
+        in https://arxiv.org/abs/1905.10694
+        """
+        assert ((self.Gmag is not None) & (self.G_BP is not None) & (self.G_RP is not None))
+        X = self.G_BP - self.G_RP
+        return (self.Gmag + 0.0176 + 0.006860 * X + 0.1732 * X**2)
 
     def TESS_Mag_VJH(self):
         """ TESS magnitude estimate based on magnitude and
@@ -286,6 +319,10 @@ def ticgen(args=None):
         parser.add_argument('-V', '--Vmag', type=float,
                             help="V magnitude of the source")
         parser.add_argument('-G', '--Gmag', type=float,
+                            help="Gaia magnitude of the source")
+        parser.add_argument('-G_RP', '--G_RP', type=float,
+                            help="Gaia BP band magnitude of the source")
+        parser.add_argument('-G_BP', '--G_BP', type=float,
                             help="Gaia magnitude of the source")
         parser.add_argument('-H', '--Hmag', type=float,
                             help="H magnitude of the source")
@@ -416,7 +453,7 @@ def parse_file(infile):
 
     good_cnames = np.array(['Tmag', 'Vmag',
                             'Jmag', 'Bmag', 'Bphmag',
-                            'Ksmag', 'Hmag', 'Gmag'])
+                            'Ksmag', 'Hmag', 'Gmag', 'G_BP','B_RP'])
     for cname in mags.columns.values:
         if cname not in good_cnames:
             logger.error("Unrecognized column {} found. ".format(cname) +
@@ -446,6 +483,10 @@ def calc_star(args):
         V magnitude of the source
     Gmag : float, optional
         Gaia magnitude of the source
+    G_BP : float, optional
+        Gaia blue band magnitude of the source
+    G_RP : float, optional
+        Gaia red band magnitude of the source
     Hmag : float, optional
         H magnitude of the source
     Bmag : float, optional

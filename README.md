@@ -38,6 +38,8 @@ You can provide any combination of these mangitudes
 *  -K KSMAG, --Ksmag KSMAG Ks magnitude of the source
 *  -V VMAG, --Vmag VMAG  V magnitude of the source
 *  -G GMAG, --Gmag GMAG  Gaia magnitude of the source
+*  -G_RP G_RPMAG, --G_RP G_RPMAG Gaia red band magnitude of the source
+*  -G_BP G_BPMAG, --G_BP G_BPMAG Gaia blue band magnitude of the source
 *  -H HMAG, --Hmag HMAG  H magnitude of the source
 *  -B BMAG, --Bmag BMAG  B magnitude of the source
 *  --Bphmag BPHMAG       B photgraphic magnitude of the source
@@ -82,14 +84,14 @@ and this would output
 ```
 
 ## Further Documentation
-This code is build using the algorithms from the TESS Input Catalog publication from [Stassun et al. (2017)](https://arxiv.org/abs/1706.00495).
+This code is build using the algorithms from the TESS Input Catalog publication from [Stassun et al. (2017)](https://arxiv.org/abs/1706.00495) and [Stassun et al. (2019)](https://arxiv.org/abs/1905.10694).
 
 ## Citation
 If you find this code useful and want to cite it in your research then we have made that possible for you
 ```
 Jaffe, T. J. & Barclay, T. 2017, ticgen: A tool for calculating a TESS magnitude, and an expected noise level for stars to be observed by TESS., v1.0.0, Zenodo, doi:10.5281/zenodo.888217
 ```
-Please also cite [Stassun et al. (2017)](https://arxiv.org/abs/1706.00495) who developed the algorithms underlying this code.
+Please also cite [Stassun et al. (2017)](https://arxiv.org/abs/1706.00495) and [Stassun et al. (2019)](https://arxiv.org/abs/1905.10694) who developed the algorithms underlying this code.
                  
 
 
